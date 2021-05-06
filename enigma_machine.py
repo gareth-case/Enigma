@@ -32,13 +32,12 @@ class EnigmaMachine:
                  rotor_types=['I', 'II', 'III'],
                  rotor_positions='DEF',
                  ring_settings='ABC',
-                 reflector_mapping='YEWMBTJXQGULDPONIRZFKVCHAS',
+                 reflector_mapping='B',
                  steckered_pairing='AM FI NV PS TU WZ'):
         """
         Initialises an EnigmaMachine with rotors, reflector and plugboard.
         Args:
-            rotors_config (dict): Mappings and notch information for
-                                  EnigmaMachine.Rotor() objects.
+            rotor_types (lst): List of types of rotor in the machine
             rotor_positions (str): Initial positions of the rotors
             ring_settings (str): Ring settings of the rotors
             reflector_mapping (str): Requesite information to initialise a
@@ -278,8 +277,8 @@ class EnigmaMachine:
         to the left of this rotor.
 
         Attributes:
-            mapping: (str)
-                A string of length 26 that says what each letter is mapped to.
+            rotor_type: (str)
+                A Roman Numeral expressing the rotor type (I-V).
             position: (str)
                 A letter of the alphabet denoting the position of the rotor.
             ring_setting: (str)
@@ -440,6 +439,7 @@ class EnigmaMachine:
             reflector_mapping: (str)
                 A string of length 26 that says what each letter is mapped to.
                 A mapping must pair up letters (so if A -> Y, then Y-> A).
+                Can also be one of three standard reflectors (A, B or C).
         """
         def __init__(self, reflector_mapping='A'):
             """
@@ -521,17 +521,16 @@ class EnigmaMachine:
 
         Attributes:
             steckered_pairing: (str)
-                A string of length 26 that says what each letter is mapped to.
-                A mapping must pair up letters (so if A -> Y, then Y-> A).
+                A string of pairs of letters delimited by a space that encodes
+                letter pairing.
         """
         def __init__(self, steckered_pairing='AM FI NV PS TU WZ'):
             """
             Initialises a Plugboard from an EnigmaMachine.
             Args:
                 reflector_mapping (str):
-                    A string of length 26 that says what each letter is mapped
-                    to. A mapping must pair up letters (so if A -> Y, then
-                    Y-> A).
+                    A string of pairs of letters delimited by a space that
+                    encodes letter pairing.
 
             Raises:
                 ValueError if mapping does not map letter pairs.
