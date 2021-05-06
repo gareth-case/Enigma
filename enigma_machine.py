@@ -604,30 +604,64 @@ if __name__ == '__main__':
         EM = EnigmaMachine()
     else:
         print('Time to configure the machine!')
-        num_rotor = int(input('Firstly, enter the number of rotors in your '
-                              'machine: '))
+        successful_input = 'N'
+        while successful_input == 'N':
+            num_rotor = input('Firstly, enter the number of rotors in your '
+                              'machine: ')
+            try:
+                num_rotor = int(num_rotor)
+                successful_input = 'Y'
+            except ValueError as err:
+                print(f'Number must be a positive integer. {err}')
         rotor_types = []
         rotor_positions = ''
         ring_settings = ''
         for i in range(num_rotor):
             print(f'Let\'s configure rotor {i+1}')
-            rotor_type = input(f'Enter the rotor type (Roman numeral I - V) '
-                               f' for rotor {i+1}: ')
+            successful_input = 'N'
+            while successful_input == 'N':
+                rotor_type = input(
+                    'Enter the rotor type (Roman numeral I - V) for rotor '
+                    f'{i+1}: ')
+                rotor_position = str.upper(input(
+                    f'Enter the rotor position (single letter A-Z) for rotor '
+                    f' {i+1}: '))
+                ring_setting = str.upper(input(
+                    'Enter the ring setting (single letter A-Z) for rotor '
+                    f'{i+1}: '))
+                try:
+                    EnigmaMachine.Rotor(rotor_type, rotor_position,
+                                        ring_setting)
+                    successful_input = 'Y'
+                except ValueError as err:
+                    print(f'Error in input for rotor {i+1}: {err}.\n'
+                          'Let\'s try again.')
             rotor_types.append(rotor_type)
-
-            rotor_position = str.upper(input(
-                f'Enter the rotor position (single letter A-Z) for rotor '
-                f' {i+1}: '))
             rotor_positions = rotor_positions + rotor_position
-
-            ring_setting = str.upper(input(
-                f'Enter the ring setting  (single letter A-Z) for rotor {i+1}'
-                ': '))
             ring_settings = ring_settings + ring_setting
-        reflector_mapping = str.upper(input('Enter a reflector (A, B or C): '))
-        steckered_pairing = str.upper(input(
-            'Finally, enter a steckered pairing (pairs of letters or N for no'
-            ' plugboard): '))
+        successful_input = 'N'
+        while successful_input == 'N':
+            reflector_mapping = str.upper(input(
+                'Enter a reflector (A, B or C): '))
+            try:
+                EnigmaMachine.Reflector(reflector_mapping)
+                successful_input = 'Y'
+            except ValueError as err:
+                print(f'Error in input for reflector: {err} Let\'s try '
+                      'again')
+
+        successful_input = 'N'
+        while successful_input == 'N':
+            steckered_pairing = str.upper(input(
+                'Finally, enter a steckered pairing (pairs of letters or N'
+                'for no plugboard): '))
+            try:
+                EnigmaMachine.Plugboard(steckered_pairing)
+                successful_input = 'Y'
+            except ValueError as err:
+                print(f'Error in input for reflector: {err}. Let\'s try '
+                      'again')
+
         EM = EnigmaMachine(rotor_types=rotor_types,
                            rotor_positions=rotor_positions,
                            ring_settings=ring_settings,
