@@ -593,24 +593,25 @@ class EnigmaMachine:
 
 if __name__ == '__main__':
     print('Welcome to the Enigma Simulator!')
-    sleep(2)
+    sleep(1)
     print('Here you can configure very own Enigma Machine and use it to '
           'encrypt messages.')
+    sleep(1)
     configure_enigma = input('Enter Y to skip configuration and use default '
-                             'settings or instead enter any key to go ahead '
-                             'and configure your machine. ')
+                             'settings or instead press enter to go ahead '
+                             'and configure your machine.')
     if str.upper(configure_enigma) == 'Y':
         print('Default machine selected.')
         EM = EnigmaMachine()
     else:
         print('Time to configure the machine!')
-        successful_input = 'N'
-        while successful_input == 'N':
+        successful_input = False
+        while not successful_input:
             num_rotor = input('Firstly, enter the number of rotors in your '
                               'machine: ')
             try:
                 num_rotor = int(num_rotor)
-                successful_input = 'Y'
+                successful_input = True
             except ValueError as err:
                 print(f'Number must be a positive integer. {err}')
         rotor_types = []
@@ -618,46 +619,46 @@ if __name__ == '__main__':
         ring_settings = ''
         for i in range(num_rotor):
             print(f'Let\'s configure rotor {i+1}')
-            successful_input = 'N'
-            while successful_input == 'N':
+            successful_input = False
+            while not successful_input:
                 rotor_type = input(
                     'Enter the rotor type (Roman numeral I - V) for rotor '
                     f'{i+1}: ')
                 rotor_position = str.upper(input(
                     f'Enter the rotor position (single letter A-Z) for rotor '
-                    f' {i+1}: '))
+                    f'{i+1}: '))
                 ring_setting = str.upper(input(
                     'Enter the ring setting (single letter A-Z) for rotor '
                     f'{i+1}: '))
                 try:
                     EnigmaMachine.Rotor(rotor_type, rotor_position,
                                         ring_setting)
-                    successful_input = 'Y'
+                    successful_input = True
                 except ValueError as err:
                     print(f'Error in input for rotor {i+1}: {err}.\n'
                           'Let\'s try again.')
             rotor_types.append(rotor_type)
             rotor_positions = rotor_positions + rotor_position
             ring_settings = ring_settings + ring_setting
-        successful_input = 'N'
-        while successful_input == 'N':
+        successful_input = False
+        while not successful_input:
             reflector_mapping = str.upper(input(
                 'Enter a reflector (A, B or C): '))
             try:
                 EnigmaMachine.Reflector(reflector_mapping)
-                successful_input = 'Y'
+                successful_input = True
             except ValueError as err:
                 print(f'Error in input for reflector: {err} Let\'s try '
                       'again')
 
-        successful_input = 'N'
-        while successful_input == 'N':
+        successful_input = False
+        while not successful_input:
             steckered_pairing = str.upper(input(
-                'Finally, enter a steckered pairing (pairs of letters or N'
+                'Finally, enter a steckered pairing (pairs of letters or N '
                 'for no plugboard): '))
             try:
                 EnigmaMachine.Plugboard(steckered_pairing)
-                successful_input = 'Y'
+                successful_input = True
             except ValueError as err:
                 print(f'Error in input for reflector: {err}. Let\'s try '
                       'again')
@@ -682,6 +683,6 @@ if __name__ == '__main__':
         sleep(1)
         print(f'Encrypted message: {EM.encrypt_message(message)}')
         encryption = str.upper(input(
-            'Would you like to encrypt another message? (Y/N) '))
+            'Would you like to encrypt another message? (Y/N): '))
 
     print('Thanks for using the Enigma Simulator!')
