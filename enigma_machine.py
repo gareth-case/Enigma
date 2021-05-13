@@ -28,7 +28,7 @@ class EnigmaMachine:
         Reflector object
     """
     def __init__(self,
-                 # Standard Rotors for the Enigma I machine
+                 # Default settings for Enigma Mk I.
                  rotor_types=['I', 'II', 'III'],
                  rotor_positions='DEF',
                  ring_settings='ABC',
@@ -44,7 +44,7 @@ class EnigmaMachine:
                                      EnigmaMachine.Reflector object
             steckered_pairing (str): Requesite information to initialise a
                                      EnigmaMachine.Plugboard object. If False
-                                     then plugboard is set at "ABCDE..."
+                                     then plugboard is set at ""
                                      (which is equivalent to no plugboard).
         """
         # Initialise rotors from config.
@@ -60,7 +60,7 @@ class EnigmaMachine:
                 rotor_type=rotor_types[i],
                 position=rotor_positions[i],
                 ring_setting=ring_settings[i]))
-        # Provides the option of having no plugboard
+        # Provides the option of having no plugboard.
         if not steckered_pairing:
             steckered_pairing = ''
         self.plugboard = EnigmaMachine.Plugboard(steckered_pairing)
@@ -180,7 +180,7 @@ class EnigmaMachine:
                 if i < len(self.rotors) - 2:
                     adjacent_rotor.turn_rotor()
 
-        # Last rotor always turns
+        # Last rotor always turns.
         self.rotors[-1].turn_rotor()
 
     def press_key(self, letter):
@@ -220,7 +220,7 @@ class EnigmaMachine:
         # Current now passes through the reflector.
         encrypted_letter = self.reflector.map_letter(encrypted_letter)
         # Current now passes back through the rotors, but starting from the
-        # left this time (so rotor 1 -> rotor 2 -> rotor 3...)
+        # left this time (so rotor 1 -> rotor 2 -> rotor 3...).
         for rotor in self.rotors:
             encrypted_letter = rotor.map_letter(encrypted_letter,
                                                 reverse=True)
@@ -353,9 +353,9 @@ class EnigmaMachine:
             Example: If a rotor is in position "F" then after turning
                      it will be in position "G".
             """
-            # Translate letter position to number
+            # Translate letter position to number.
             position_nbr = EnigmaMachine.letter_to_number(self.position)
-            # Get new letter position by adding 1
+            # Get new letter position by adding 1.
             new_rotor_nbr = (position_nbr + 1) % 26
             self.position = EnigmaMachine.number_to_letter(new_rotor_nbr)
 
@@ -377,7 +377,7 @@ class EnigmaMachine:
             for letter in self.mapping:
                 shifted_mapping = shifted_mapping + \
                                   EnigmaMachine.caeser_shift(letter, shift)
-            # Adding positional shift due to ring settings
+            # Adding positional shift due to ring settings.
             shifted_mapping = [char for char in shifted_mapping]
             shifted_mapping = \
                 [shifted_mapping[(i - shift) % 26] for i in range(26)]
@@ -548,7 +548,7 @@ class EnigmaMachine:
                     or len(set(steckered_pairing_no_spaces)) != \
                         len(steckered_pairing_no_spaces):
                     raise ValueError(error)
-                # needs to be pairs of letters
+                # Needs to be pairs of letters.
                 for i in range(len(steckered_pairing)):
                     if i % 3 == 2 and steckered_pairing[i] != ' ':
                         raise ValueError(error)
@@ -597,10 +597,10 @@ if __name__ == '__main__':
     print('Here you can configure very own Enigma Machine and use it to '
           'encrypt messages.')
     sleep(1)
-    configure_enigma = input('Enter Y to skip configuration and use default '
+    configure_enigma = input('Enter "N" to skip configuration and use default '
                              'settings or instead press enter to go ahead '
-                             'and configure your machine.')
-    if str.upper(configure_enigma) == 'Y':
+                             'and configure your machine. ')
+    if str.upper(configure_enigma) == 'N':
         print('Default machine selected.')
         EM = EnigmaMachine()
     else:
@@ -683,6 +683,7 @@ if __name__ == '__main__':
         sleep(1)
         print(f'Encrypted message: {EM.encrypt_message(message)}')
         encryption = str.upper(input(
-            'Would you like to encrypt another message? (Y/N): '))
+            'Would you like to encrypt another message with the same machine'
+            '? (Rotor positions will not be reset). (Y/N): '))
 
     print('Thanks for using the Enigma Simulator!')
